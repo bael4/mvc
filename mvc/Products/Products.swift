@@ -1,25 +1,24 @@
 //
-//  Beers.swift
+//  ViewController.swift
 //  mvc
 //
-//  Created by Баэль Рыспеков on 15/4/23.
+//  Created by Баэль Рыспеков on 18/4/23.
 //
 
 import UIKit
 
 
-
-class Beers: UIViewController {
+class Products: UIViewController {
     
-    var beers: [Beer] = []
+    var productsModel: [Product] = []
     
-    private lazy var beerColection: UICollectionView = {
+    private lazy var productColection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
 //        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         layout.minimumLineSpacing = 20
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.register(BeerCell.self, forCellWithReuseIdentifier: "id")
+        view.register(ProductCell.self, forCellWithReuseIdentifier: "id")
         view.dataSource = self
         view.delegate = self
         return view
@@ -31,9 +30,9 @@ class Beers: UIViewController {
         
         setupSubViews()
         fetchBeerList { result in
-            self.beers = result
+            self.productsModel = result.products
             DispatchQueue.main.async {
-                self.beerColection.reloadData()
+                self.productColection.reloadData()
             }
       
         }
@@ -45,20 +44,20 @@ class Beers: UIViewController {
         view.backgroundColor = .yellow
         
         
-        view.addSubview(beerColection)
-        beerColection.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(productColection)
+        productColection.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            beerColection.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-            beerColection.bottomAnchor.constraint(equalTo: view.bottomAnchor , constant: -100),
-            beerColection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            beerColection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
+            productColection.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            productColection.bottomAnchor.constraint(equalTo: view.bottomAnchor , constant: -100),
+            productColection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            productColection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
         ])
         
     }
     
     
-    func fetchBeerList (completion: @escaping ([Beer]) -> ()) {
-        let url = URL(string: "https://api.punkapi.com/v2/beers/")
+    func fetchBeerList (completion: @escaping (ProductsModel) -> ()) {
+        let url = URL(string: "https://dummyjson.com/products")
         
         let request = URLRequest(url: url!)
         
@@ -67,8 +66,8 @@ class Beers: UIViewController {
             guard let data = data, error == nil else {return}
             
            do {
-               let result = try JSONDecoder().decode([Beer].self, from: data)
-               print(result)
+               let result = try JSONDecoder().decode(ProductsModel.self, from: data)
+          
                completion(result)
            } catch {
                print(error)
@@ -82,14 +81,14 @@ class Beers: UIViewController {
 
 
 
-extension Beers: UICollectionViewDataSource {
+extension Products: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        beers.count
+       return productsModel.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! BeerCell
-        cell.fill(beer: beers[indexPath.row])
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! ProductCell
+        cell.fill(product: productsModel[indexPath.row])
         cell.backgroundColor = .systemGreen
         return cell
     }
@@ -98,7 +97,7 @@ extension Beers: UICollectionViewDataSource {
 }
 
 
-extension Beers: UICollectionViewDelegateFlowLayout {
+extension Products: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 400)
     }

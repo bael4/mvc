@@ -8,8 +8,8 @@
 import Foundation
 
 
-class DataManager {
-    func getUsers (compeletion: ([User]) ->()) {
-        compeletion([User(name: "Bael"),User(name: "Raf"), User(name: "Azim")])
-    }
-}
+//class DataManager {
+//    func getUsers (compeletion: ([User]) ->()) {
+//        compeletion([User(name: "Bael"),User(name: "Raf"), User(name: "Azim")])
+//    }
+//}

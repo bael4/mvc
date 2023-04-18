@@ -12,5 +12,7 @@ import Foundation
 struct Beer: Codable {
     var name: String
     var description: String
-    var image: String
+    var image_url: String
 }
+
+

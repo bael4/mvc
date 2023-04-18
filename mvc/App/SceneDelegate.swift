@@ -16,9 +16,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
      
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = Beers()
-        self.window = window
+    
         
+        
+        
+        let BeerVC = Beers()
+        let BeerTabBar = UITabBarItem(title: "Contacts", image: UIImage(systemName: "person.fill"), selectedImage: UIImage(systemName: "person.fill"))
+        BeerVC.tabBarItem = BeerTabBar
+
+        
+        
+        let ProfuctVC = Products()
+        let ProfuctTabBar = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star"), selectedImage: UIImage(systemName: "star"))
+        ProfuctVC.tabBarItem = ProfuctTabBar
+        
+        
+        
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [BeerVC,ProfuctVC]
+        
+        
+        window.rootViewController = tabBarController
+        self.window = window
         window.makeKeyAndVisible()
         window.backgroundColor = .white
     }
